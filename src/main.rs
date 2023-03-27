@@ -5,7 +5,7 @@ use copypasta::ClipboardContext;
 
 use copypasta::ClipboardProvider;
 use reqwest::blocking::{Client, ClientBuilder};
-use rustyline::Editor;
+use rustyline::DefaultEditor;
 use structopt::StructOpt;
 
 mod formatters;
@@ -184,10 +184,10 @@ fn main() {
                 }
             }
         } else {
-            let mut reader = Editor::<()>::new().unwrap();
+            let mut reader = DefaultEditor::new().unwrap();
             while let Ok(w) = reader.readline("> ") {
                 let word = w.trim();
-                reader.add_history_entry(word);
+                reader.add_history_entry(word).ok();
                 if !word.is_empty() {
                     lookup_explain(&mut client, word, fmt, ydcv_options.raw);
                 }
